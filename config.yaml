@@ -2,7 +2,9 @@ gateways:
   duckdb:
     connection:
       type: duckdb
-      database: db.db
+      catalogs:
+        persistent: "db.db"
+        memory: ":memory:"
       # concurrent_tasks: 1
       # register_comments: True
       # pre_ping: False

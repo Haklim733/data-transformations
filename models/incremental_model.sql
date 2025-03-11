@@ -11,8 +11,7 @@ MODEL (
 SELECT
   id,
   item_id,
-  event_date,
-  'z' AS new_column
+  event_date
 FROM sqlmesh_example.seed_model
 WHERE
   event_date BETWEEN @start_date AND @end_date

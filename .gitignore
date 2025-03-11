@@ -15,3 +15,7 @@ wheels/
 
 # sqlmesh
 .cache
+logs
+
+# secrets
+.env

@@ -1,18 +1,21 @@
 gateways:
-  duckdb:
+  local:
     connection:
       type: duckdb
       catalogs:
         persistent: "db.db"
         memory: ":memory:"
-      # concurrent_tasks: 1
-      # register_comments: True
-      # pre_ping: False
-      # pretty_sql: False
-      # catalogs:
-      # extensions:
-      # connector_config:
-      # token:
+        md:
+          type: motherduck
+          read_only: True
+          token: {{ env_var('motherduck_token') }}
+          path: 'sample_data'
+      register_comments: True
+      pre_ping: False
+      pretty_sql: True
+      extensions:
+        - motherduck 
+        - httpfs
     state_connection:
       type: postgres
       user: {{ env_var('SUPABASE_DB_USER') }}
@@ -20,15 +23,22 @@ gateways:
       host: {{ env_var('SUPABASE_DB_HOST') }}
       password: {{ env_var('SUPABASE_DB_PASSWORD') }}
       database: postgres
-  motherduck:
+
+  md:
     connection:
       type: motherduck
-      catalogs:
-        persistent: "md:"
-        ephemeral: ":memory:"
-      token: {{ env_var('MOTHERDUCK_TOKEN') }}
+      token: {{ env_var('motherduck_token') }}
+      database: "test"
+  md_source:
+    connection:
+      type: motherduck
+      token: {{ env_var('motherduck_token') }}
+      database: "sample_data"
+      # catalogs:
+      #   sample_data: "md:"
+      #   memory: ":memory:"
 
-default_gateway: duckdb
+default_gateway: local 
 
 model_defaults:
   dialect: duckdb

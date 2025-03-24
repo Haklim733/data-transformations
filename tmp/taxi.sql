@@ -2,7 +2,7 @@ MODEL (
   name nyc.taxi,
   kind FULL,
   dialect duckdb,
-  gateway md 
+  gateway md
 );
 
 
@@ -27,4 +27,3 @@ SELECT
     congestion_surcharge::DOUBLE,
     airport_fee::DOUBLE
 FROM nyc.taxi;
--- UNCACHE TABLE countries;

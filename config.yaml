@@ -3,13 +3,14 @@ gateways:
     connection:
       type: duckdb
       catalogs:
-        persistent: "db.db"
-        memory: ":memory:"
-        md:
+        test:
           type: motherduck
+          path: 'md:test'
+        sample_data:
+          type: motherduck
+          path: 'md:sample_data'
           read_only: True
-          token: {{ env_var('motherduck_token') }}
-          path: 'sample_data'
+        memory: ":memory:"
       register_comments: True
       pre_ping: False
       pretty_sql: True
@@ -22,23 +23,43 @@ gateways:
       port: {{ env_var('SUPABASE_DB_PORT') }}
       host: {{ env_var('SUPABASE_DB_HOST') }}
       password: {{ env_var('SUPABASE_DB_PASSWORD') }}
+      database: postgres 
+  prod:
+    connection:
+      type: motherduck
+      token: {{ env_var('motherduck_token') }}
+      catalogs:
+        prod:
+          type: motherduck
+          path: 'md:prod'
+        sample_data:
+          type: motherduck
+          path: 'md:sample_data'
+          read_only: True
+        memory: ":memory:"
+    state_connection:
+      type: postgres
+      user: {{ env_var('PROD_SUPABASE_DB_USER') }}
+      port: {{ env_var('PROD_SUPABASE_DB_PORT') }}
+      host: {{ env_var('PROD_SUPABASE_DB_HOST') }}
+      password: {{ env_var('PROD_SUPABASE_DB_PASSWORD') }}
       database: postgres
-
-  md:
+  athena_dev:
     connection:
-      type: motherduck
-      token: {{ env_var('motherduck_token') }}
-      database: "test"
-  md_source:
+      type: athena 
+      aws_access_key_id: {{ env_var('AWS_ACCESS_KEY_ID') }}
+      aws_secret_access_key: {{ env_var('AWS_SECRET_ACCESS_KEY') }}
+      role_arn: {{ env_var('AWS_ROLE_ARN') }}
+      work_group: primary
+  athena_prod:
     connection:
-      type: motherduck
-      token: {{ env_var('motherduck_token') }}
-      database: "sample_data"
-      # catalogs:
-      #   sample_data: "md:"
-      #   memory: ":memory:"
+      type: athena 
+      aws_access_key_id: {{ env_var('AWS_ACCESS_KEY_ID') }}
+      aws_secret_access_key: {{ env_var('AWS_SECRET_ACCESS_KEY') }}
+      role_arn: {{ env_var('AWS_ROLE_ARN') }}
+      work_group: primary
 
-default_gateway: local 
+default_gateway: local
 
 model_defaults:
   dialect: duckdb

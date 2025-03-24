@@ -1,6 +1,5 @@
 - name: sample_data.nyc.taxis
   description: nyc taxi data on motherduck
-  gateway: md_source 
   columns:
     VendorID: BIGINT
     tpep_pickup_datetime: TIMESTAMP

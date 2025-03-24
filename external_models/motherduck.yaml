@@ -1,4 +1,4 @@
-- name: sample_data.nyc.taxis
+- name: sample_data.nyc.taxi
   description: nyc taxi data on motherduck
   columns:
     VendorID: BIGINT

@@ -1,0 +1,9 @@
+- name: postgres.public.test
+  description: postgres public messages from generator
+  columns:
+    origin_id: VARCHAR
+    event_id: VARCHAR
+    message: VARCHAR
+    created_at: TIMESTAMP
+    inserted_at: TIMESTAMP
+    updated_at: TIMESTAMP

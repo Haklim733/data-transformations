@@ -1,0 +1,1 @@
+uv run python -m generator.db_generate --max-time=1 --table=messages

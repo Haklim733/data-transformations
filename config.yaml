@@ -3,20 +3,23 @@ gateways:
     connection:
       type: duckdb
       catalogs:
-        test:
-          type: motherduck
-          path: 'md:test'
+        dev: "db.db"
         sample_data:
           type: motherduck
           path: 'md:sample_data'
           read_only: True
-        memory: ":memory:"
+        postgres:
+          type: postgres
+          path: 'dbname=postgres user={{ env_var("SUPABASE_DB_USER") }} password={{ env_var("SUPABASE_DB_PASSWORD") }} host={{ env_var("SUPABASE_DB_HOST") }} port={{ env_var("SUPABASE_DB_PORT") }}'
+          read_only: true
+        epehemeral: ":memory:"
       register_comments: True
       pre_ping: False
       pretty_sql: True
       extensions:
         - motherduck 
         - httpfs
+        - postgres
     state_connection:
       type: postgres
       user: {{ env_var('SUPABASE_DB_USER') }}
@@ -44,23 +47,12 @@ gateways:
       host: {{ env_var('PROD_SUPABASE_DB_HOST') }}
       password: {{ env_var('PROD_SUPABASE_DB_PASSWORD') }}
       database: postgres
-  athena_dev:
-    connection:
-      type: athena 
-      aws_access_key_id: {{ env_var('AWS_ACCESS_KEY_ID') }}
-      aws_secret_access_key: {{ env_var('AWS_SECRET_ACCESS_KEY') }}
-      role_arn: {{ env_var('AWS_ROLE_ARN') }}
-      work_group: primary
-  athena_prod:
-    connection:
-      type: athena 
-      aws_access_key_id: {{ env_var('AWS_ACCESS_KEY_ID') }}
-      aws_secret_access_key: {{ env_var('AWS_SECRET_ACCESS_KEY') }}
-      role_arn: {{ env_var('AWS_ROLE_ARN') }}
-      work_group: primary
 
 default_gateway: local
 
 model_defaults:
   dialect: duckdb
   start: 2025-03-10
+
+ignore_patterns:
+  - "generator"

@@ -22,3 +22,5 @@ logs
 
 tmp
 notebook
+
+**/.pytest_cache

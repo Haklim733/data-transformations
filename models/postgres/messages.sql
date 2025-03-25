@@ -1,6 +1,6 @@
 MODEL (
   name pg.messages,
-  kind VIEW,
+  kind FULL,
   dialect duckdb,
   audits (
     latency_threshold(column := latency, threshold := 1000)
@@ -23,4 +23,4 @@ SELECT
   created_at,
   inserted_at,
   latency
-FROM source
+FROM source;

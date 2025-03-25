@@ -3,14 +3,18 @@ gateways:
     connection:
       type: duckdb
       catalogs:
-        dev: "db.db"
+        sqlmesh:
+          # type: duckdb
+          # path: 'db.db'
+          type: motherduck
+          path: 'md:sqlmesh'
         sample_data:
           type: motherduck
           path: 'md:sample_data'
           read_only: True
         postgres:
           type: postgres
-          path: 'dbname=postgres user={{ env_var("PROD_SUPABASE_DB_USER") }} password={{ env_var("PROD_SUPABASE_DB_PASSWORD") }} host={{ env_var("PROD_SUPABASE_DB_HOST") }} port={{ env_var("PROD_SUPABASE_DB_PORT") }}'
+          path: 'dbname=postgres user={{ env_var("SUPABASE_DB_USER") }} password={{ env_var("SUPABASE_DB_PASSWORD") }} host={{ env_var("SUPABASE_DB_HOST") }} port={{ env_var("SUPABASE_DB_PORT") }}'
           read_only: true
         epehemeral: ":memory:"
       register_comments: True
@@ -27,7 +31,7 @@ gateways:
       host: {{ env_var('SUPABASE_DB_HOST') }}
       password: {{ env_var('SUPABASE_DB_PASSWORD') }}
       database: postgres 
-  prod:
+  md:
     connection:
       type: motherduck
       token: {{ env_var('motherduck_token') }}
@@ -45,7 +49,6 @@ default_gateway: local
 
 model_defaults:
   dialect: duckdb
-  start: 2025-03-10
 
 ignore_patterns:
   - "generator"

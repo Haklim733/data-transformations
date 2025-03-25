@@ -104,8 +104,6 @@ class DbClient:
             values=sql.SQL(", ").join(
                 (
                     sql.SQL("({})").format(sql.Placeholder())
-                    # if key == "created_at"
-                    # else sql.Placeholder()
                 )
                 for key in data.keys()
             ),
@@ -137,7 +135,6 @@ class Message(ABC):
 class TextMessage(Message):
 
     def generate(self, **kwargs):
-        # created_at = time.time() 
         created_at = datetime.datetime.now(datetime.timezone.utc) 
         message = self.generate_method(**kwargs)
         event_id: str = uuid.uuid4().hex
@@ -162,7 +159,7 @@ class DBWriter(Generator):
         table_name: str,
         primary_keys: list[str],
         schema: dict[str, str] = {},
-        create_table: bool = False,
+        recreate_table: bool = False,
     ):
         super().__init__(client)
         self.client = client
@@ -170,8 +167,9 @@ class DBWriter(Generator):
         self.schema: dict[str, str] = schema
         self.primary_keys: list[str] = primary_keys
 
-        if create_table:
-            self._create_table()
+        if recreate_table:
+            self._drop_table()
+        self._create_table()
 
     def _drop_table(self):
         query = sql.SQL(
@@ -184,7 +182,6 @@ class DBWriter(Generator):
         self.client.execute(query)
 
     def _create_table(self):
-        self._drop_table()
         if not self.schema:
             raise Exception("Schema is empty")
 

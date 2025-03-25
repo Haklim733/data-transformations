@@ -18,7 +18,7 @@ DB_PORT = os.getenv("SUPABASE_DB_PORT", "5432")
 logger = logging.getLogger(__name__)
 
 
-def main(table: str, max_time: int):
+def main(table: str, max_time: int, recreate_table: bool = False):
     if not max_time:
         max_time = 120
 
@@ -34,7 +34,7 @@ def main(table: str, max_time: int):
         client=client,
         table_name=table,
         primary_keys=["event_id"],
-        create_table=True,
+        recreate_table=recreate_table,
         schema=schema
     )
     fake = Faker()
@@ -62,6 +62,13 @@ if __name__ == "__main__":
         required=False,
         help="max time (sec) to generate messages",
     )
+    parser.add_argument(
+        "--recreate-table",
+        dest="recreate_table",
+        required=False,
+        action=argparse.BooleanOptionalAction,
+        help="drop and create table. adding flag results to True",
+    )
 
     argv = sys.argv[1:]
     known_args, _ = parser.parse_known_args(argv)
@@ -69,4 +76,6 @@ if __name__ == "__main__":
     max_time = 60
     if known_args.max_time:
         max_time = int(known_args.max_time)
-    main(table=known_args.table, max_time=max_time)
+
+    print(known_args.recreate_table)
+    main(table=known_args.table, max_time=max_time, recreate_table=known_args.recreate_table)

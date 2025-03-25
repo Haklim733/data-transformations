@@ -1,6 +1,6 @@
 MODEL (
   name md.taxi_passengers_by_hour,
-  kind  VIEW,
+  kind VIEW,
 );
 
 SELECT 

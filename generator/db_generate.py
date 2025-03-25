@@ -9,11 +9,11 @@ from generator.models import DbClient, DBWriter, TextMessage
 
 
 RUNTIME_ENV = os.getenv("RUNTIME_ENV", "local")
-DB_NAME = os.getenv("PROD_SUPABASE_DB_NAME", "postgres")
-DB_USER = os.getenv("PROD_SUPABASE_DB_USER", "admin")
-DB_PASSWORD = os.getenv("PROD_SUPABASE_DB_PASSWORD", "admin")
-DB_HOST = os.getenv("PROD_SUPABASE_DB_HOST", "localhost")
-DB_PORT = os.getenv("PROD_SUPABASE_DB_PORT", "5432")
+DB_NAME = os.getenv("SUPABASE_DB_NAME", "postgres")
+DB_USER = os.getenv("SUPABASE_DB_USER", "admin")
+DB_PASSWORD = os.getenv("SUPABASE_DB_PASSWORD", "admin")
+DB_HOST = os.getenv("SUPABASE_DB_HOST", "localhost")
+DB_PORT = os.getenv("SUPABASE_DB_PORT", "5432")
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ def main(table: str, max_time: int):
     if not max_time:
         max_time = 120
 
-    schema = {'origin_id':'varchar',  'event_id': 'varchar', 'message': 'text', 'created_at': 'timestamp'}
+    schema = {'origin_id':'varchar',  'event_id': 'varchar', 'message': 'text', 'created_at': 'timestamptz'}
     client = DbClient(
         dbname=DB_NAME,
         user=DB_USER,

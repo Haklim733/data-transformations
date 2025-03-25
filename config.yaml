@@ -10,7 +10,7 @@ gateways:
           read_only: True
         postgres:
           type: postgres
-          path: 'dbname=postgres user={{ env_var("SUPABASE_DB_USER") }} password={{ env_var("SUPABASE_DB_PASSWORD") }} host={{ env_var("SUPABASE_DB_HOST") }} port={{ env_var("SUPABASE_DB_PORT") }}'
+          path: 'dbname=postgres user={{ env_var("PROD_SUPABASE_DB_USER") }} password={{ env_var("PROD_SUPABASE_DB_PASSWORD") }} host={{ env_var("PROD_SUPABASE_DB_HOST") }} port={{ env_var("PROD_SUPABASE_DB_PORT") }}'
           read_only: true
         epehemeral: ":memory:"
       register_comments: True
@@ -40,13 +40,6 @@ gateways:
           path: 'md:sample_data'
           read_only: True
         memory: ":memory:"
-    state_connection:
-      type: postgres
-      user: {{ env_var('PROD_SUPABASE_DB_USER') }}
-      port: {{ env_var('PROD_SUPABASE_DB_PORT') }}
-      host: {{ env_var('PROD_SUPABASE_DB_HOST') }}
-      password: {{ env_var('PROD_SUPABASE_DB_PASSWORD') }}
-      database: postgres
 
 default_gateway: local
 

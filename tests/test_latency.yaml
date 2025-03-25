@@ -1,0 +1,15 @@
+test_intervals:
+  model: pg.messages
+  inputs:
+    postgres.public.messages:
+      rows:
+        - origin_id: 'test'
+          event_id: 'test'
+          message: "hello world"
+          created_at: 2023-05-15T14:30:45.123456+00:00
+          inserted_at: 2023-05-15T14:30:45.123456+00:00
+  outputs:
+    query:
+      partial: true
+      rows:
+        - latency: 0

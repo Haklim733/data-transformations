@@ -1,9 +1,12 @@
-- name: postgres.public.test
+- name: postgres.public.messages
   description: postgres public messages from generator
+  audits:
+    - name: not_null
+      columns: "[origin_id]"
   columns:
     origin_id: VARCHAR
     event_id: VARCHAR
     message: VARCHAR
-    created_at: TIMESTAMP
-    inserted_at: TIMESTAMP
-    updated_at: TIMESTAMP
+    created_at: TIMESTAMPTZ
+    inserted_at: TIMESTAMPTZ
+    updated_at: TIMESTAMPTZ

@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
 from contextlib import contextmanager
+import datetime
 import logging
 import random
+import requests
 import time
 import typing
 import uuid
@@ -101,9 +103,9 @@ class DbClient:
             columns=columns,
             values=sql.SQL(", ").join(
                 (
-                    sql.SQL("to_timestamp({} / 1000)").format(sql.Placeholder())
-                    if key == "created_at"
-                    else sql.Placeholder()
+                    sql.SQL("({})").format(sql.Placeholder())
+                    # if key == "created_at"
+                    # else sql.Placeholder()
                 )
                 for key in data.keys()
             ),
@@ -135,7 +137,8 @@ class Message(ABC):
 class TextMessage(Message):
 
     def generate(self, **kwargs):
-        created_at = int(time.time() * 1000)
+        # created_at = time.time() 
+        created_at = datetime.datetime.now(datetime.timezone.utc) 
         message = self.generate_method(**kwargs)
         event_id: str = uuid.uuid4().hex
         return {"message": message, "created_at": created_at, "event_id": event_id}
@@ -149,6 +152,7 @@ class Generator(ABC):
     @abstractmethod
     def send(self, message: Message):
         raise NotImplementedError
+    
 
 
 class DBWriter(Generator):

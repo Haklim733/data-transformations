@@ -1,0 +1,102 @@
+version: 2
+
+sources:
+  - name: motherduck 
+    database: sample_data 
+    schema: nyc
+    tables:
+      - name: taxi
+        description: "NYC taxi data on MotherDuck"
+        columns:
+          - name: VendorID
+            description: "A code indicating the TPEP provider"
+            data_type: BIGINT
+          - name: tpep_pickup_datetime
+            description: "The date and time when the meter was engaged"
+            data_type: TIMESTAMP
+          - name: tpep_dropoff_datetime
+            description: "The date and time when the meter was disengaged"
+            data_type: TIMESTAMP
+          - name: passenger_count
+            description: "The number of passengers in the vehicle"
+            data_type: DOUBLE
+          - name: trip_distance
+            description: "The elapsed trip distance in miles"
+            data_type: DOUBLE
+          - name: RatecodeID
+            description: "The final rate code in effect at the end of the trip"
+            data_type: DOUBLE
+          - name: store_and_fwd_flag
+            description: "Flag indicating whether trip record was stored locally before sending to vendor"
+            data_type: VARCHAR
+          - name: PULocationID
+            description: "TLC Taxi Zone in which the taximeter was engaged"
+            data_type: BIGINT
+          - name: DOLocationID
+            description: "TLC Taxi Zone in which the taximeter was disengaged"
+            data_type: BIGINT
+          - name: payment_type
+            description: "A numeric code signifying how the passenger paid for the trip"
+            data_type: BIGINT
+          - name: fare_amount
+            description: "The time-and-distance fare calculated by the meter"
+            data_type: DOUBLE
+          - name: extra
+            description: "Miscellaneous extras and surcharges"
+            data_type: DOUBLE
+          - name: mta_tax
+            description: "MTA tax that is automatically triggered"
+            data_type: DOUBLE
+          - name: tip_amount
+            description: "Tip amount"
+            data_type: DOUBLE
+          - name: tolls_amount
+            description: "Total amount of all tolls paid in trip"
+            data_type: DOUBLE
+          - name: improvement_surcharge
+            description: "Improvement surcharge assessed trips"
+            data_type: DOUBLE
+          - name: total_amount
+            description: "The total amount charged to passengers"
+            data_type: DOUBLE
+          - name: congestion_surcharge
+            description: "Congestion surcharge for trips in Manhattan"
+            data_type: DOUBLE
+          - name: airport_fee
+            description: "Fee applied to trips starting or ending at airports"
+            data_type: DOUBLE
+  - name: postgres
+    database: postgres
+    schema: public
+    description: "Postgres database with message data from generator"
+    tables:
+      - name: messages
+        description: "Messages from generator"
+        columns:
+          - name: origin_id
+            description: "Origin identifier"
+            tests:
+              - not_null
+          - name: event_id
+            description: "Event identifier"
+          - name: message
+            description: "Message content"
+          - name: created_at
+            description: "Time when the message was created"
+          - name: inserted_at
+            description: "Time when the message was inserted into the database"
+          - name: updated_at
+            description: "Time when the message was last updated"
+models:
+  - name: passengers
+    description: "Hourly aggregation of passenger counts from NYC taxi data"
+    columns:
+      - name: hour
+        description: "The hour timestamp for this aggregation"
+        data_tests:
+          - unique
+          - not_null
+      - name: total_passengers
+        description: "Total passenger count for this hour"
+        data_tests:
+          - not_null

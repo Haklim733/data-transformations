@@ -64,12 +64,18 @@ class DbClient:
         finally:
             cursor.close()
 
-    def execute(self, stmt: str, values: list[str] = None, rollback: bool = False):
+    def execute(self, stmt: str, values: list[str] = None, rollback: bool = False, fetch: bool = False):
         with self.cursor(force_rollback=rollback) as cur:
             if values:
                 cur.execute(stmt, values)
             else:
                 cur.execute(stmt)
+            
+            result = None
+            if fetch:
+                result = cur.fetchall()
+            
+            return result
 
     def upsert(
         self,
@@ -221,7 +227,9 @@ class DBWriter(Generator):
         start_time = time.time()
         while time.time() - start_time < max_time:
             data = message.generate(**message_params)
-            data.update({"origin_id": self.origin_id})
+            server_time = self.client.execute("SELECT NOW() AT TIME ZONE 'UTC'", fetch=True) # time skew fix
+            created_at = server_time[0][0]
+            data.update({"origin_id": self.origin_id, "created_at": created_at})
             logger.info(f"writing record- {data}")
             self.client.upsert(
                 self.table_name,

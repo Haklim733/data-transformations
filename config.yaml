@@ -3,11 +3,9 @@ gateways:
     connection:
       type: duckdb
       catalogs:
-        sqlmesh:
-          # type: duckdb
-          # path: 'db.db'
-          type: motherduck
-          path: 'md:sqlmesh'
+        dev: 
+          type: duckdb
+          path: 'dev.db' #should match catalog name
         sample_data:
           type: motherduck
           path: 'md:sample_data'

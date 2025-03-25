@@ -5,9 +5,9 @@ multi_engine:
       type: duckdb
       schema: dev
       threads: 3
-      path: "local.db" #cannot have same name as motherduck db (ie. dbt.db if dbt database exists)
+      path: "local.db" #cannot have same name as motherduck db (ie. dbt.db if dbt database exists and attaching all)
       attach:
-      - path: 'md:'
+      - path: 'md:sample_data'
       - path: postgresql://{{env_var('SUPABASE_DB_USER')}}:{{env_var('SUPABASE_DB_PASSWORD')}}@{{env_var('SUPABASE_DB_HOST')}}:{{env_var('SUPABASE_DB_PORT')}}/postgres
         type: postgres
       extensions:
@@ -26,7 +26,7 @@ multi_engine:
         - "DETACH ALL;"
     prod:
       type: duckdb
-      path: "md:dbt" 
+      path: "prod.db" 
     athena:
       type: athena
       s3_staging_dir: s3://.../query-results/dbt/

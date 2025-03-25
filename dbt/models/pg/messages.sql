@@ -1,6 +1,6 @@
 {{ config(
     materialized='table',
-    database='dbt',
+    database=target.database,
 ) }}
 
 WITH source AS (

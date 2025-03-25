@@ -1,6 +1,6 @@
 {{ config(
-    materialized='view',
-    database='dbt',
+    materialized='table',
+    database=target.database,
 ) }}
 
 SELECT 

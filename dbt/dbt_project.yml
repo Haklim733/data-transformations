@@ -19,3 +19,6 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   multi_engine:
       +materialized: view
+
+on-run-end:
+  - "{{ export_artifacts() }}"

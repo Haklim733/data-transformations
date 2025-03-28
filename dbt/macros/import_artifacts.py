@@ -15,7 +15,12 @@ def main():
     config = f'dbname=postgres user={DB_USER} password={DB_PASSWORD} host={DB_HOST} port={DB_PORT}'
     conn.execute(f"ATTACH '{config}' AS postgres (TYPE postgres, SCHEMA 'public');")
     conn.execute("""
-        COPY (  SELECT manifest::JSON::VARCHAR FROM postgres.public.dbt_artifacts
+        COPY (  
+                SELECT manifest::JSON::VARCHAR
+                FROM postgres.public.dbt_artifacts
+                WHERE target_name = 'prod'
+                ORDER BY generated_at DESC
+                LIMIT 1
         ) TO './dbt/state/manifest.json' (FORMAT CSV, HEADER FALSE, QUOTE '', DELIMITER '');
     """)
 
@@ -23,12 +28,18 @@ def main():
     COPY (
         SELECT run_results::JSON::VARCHAR
         FROM postgres.public.dbt_artifacts
+        WHERE target_name = 'prod'
+        ORDER BY generated_at DESC
+        LIMIT 1
     ) TO './dbt/state/run_results.json' WITH (FORMAT CSV, HEADER FALSE, QUOTE '', DELIMITER '');
     """)
     conn.execute("""
     COPY (
         SELECT semantic_manifest::JSON::VARCHAR
         FROM postgres.public.dbt_artifacts
+        WHERE target_name = 'prod'
+        ORDER BY generated_at DESC
+        LIMIT 1
     ) TO './dbt/state/semantic_manifest.json' WITH (FORMAT CSV, HEADER FALSE, QUOTE '', DELIMITER '');
     """)
     conn.close()

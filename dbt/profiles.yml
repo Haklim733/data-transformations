@@ -26,7 +26,24 @@ multi_engine:
         - "DETACH ALL;"
     prod:
       type: duckdb
-      path: "prod.db" 
+      schema: main 
+      threads: 3
+      path: "md:dbt"
+      attach:
+      - path: postgresql://{{env_var('SUPABASE_DB_USER')}}:{{env_var('SUPABASE_DB_PASSWORD')}}@{{env_var('SUPABASE_DB_HOST')}}:{{env_var('SUPABASE_DB_PORT')}}/postgres
+        type: postgres
+      extensions:
+        - httpfs
+        - parquet
+        - aws
+        - postgres
+      secrets:
+        - type: s3
+          region: us-east-2
+      on-run-start:
+        - "INSTALL postgres; LOAD postgres;"
+      on-run-end:
+        - "DETACH ALL;"
     athena:
       type: athena
       s3_staging_dir: s3://.../query-results/dbt/

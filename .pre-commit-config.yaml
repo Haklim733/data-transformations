@@ -1,0 +1,10 @@
+repos:
+-   repo: local
+    hooks:
+    -   id: import-dbt-artifacts
+        name: Import dbt artifacts from Postgres
+        entry: bash -c 'python dbt/macros/import_artifacts.py'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [post-checkout]

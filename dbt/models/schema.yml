@@ -88,7 +88,19 @@ sources:
           - name: updated_at
             description: "Time when the message was last updated"
 models:
-  - name: passengers
+  - name: dropoff_passengers_count
+    description: "Hourly aggregation of passenger counts from NYC taxi data"
+    columns:
+      - name: hour
+        description: "The hour timestamp for this aggregation"
+        data_tests:
+          - unique
+          - not_null
+      - name: total_passengers
+        description: "Total passenger count for this hour"
+        data_tests:
+          - not_null
+  - name: pickup_passengers_count
     description: "Hourly aggregation of passenger counts from NYC taxi data"
     columns:
       - name: hour

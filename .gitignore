@@ -24,3 +24,4 @@ tmp
 notebook
 
 **/.pytest_cache
+**/.cache

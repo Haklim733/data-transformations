@@ -35,16 +35,18 @@ def main():
             json_extract_string(m.content, '$.metadata.generated_at') AS generated_at,
             m.content AS manifest,
             r.content AS run_results,
-            s.content AS semantic_manifest
+            s.content AS semantic_manifest,
+            json_extract_string(m.content, '$.metadata.user_id') AS user_id,
+            json_extract_string(m.content, '$.metadata.project_name') AS project_name,
         FROM 
             manifest m
         CROSS JOIN run_results r
         CROSS JOIN semantic s;
-    """) 
+    """.format()) 
     logger.info("exporting dbt artifacts to postgres")
     conn.execute("""
-    INSERT INTO postgres.public.dbt_artifacts (invocation_id, generated_at, manifest, run_results, semantic_manifest)
-    SELECT invocation_id, generated_at, manifest, run_results, semantic_manifest
+    INSERT INTO postgres.public.dbt_artifacts (invocation_id, generated_at, manifest, run_results, semantic_manifest, schema, user_id, project_name, database)
+    SELECT invocation_id, generated_at, manifest, run_results, semantic_manifest, schema, user_id, project_name, database
     FROM dbt_artifacts;
     """)
     conn.close()

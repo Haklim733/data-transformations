@@ -11,7 +11,9 @@ sqlmesh offers simple configuration to host state connection information. Howeve
 Optimizing dbt operations on only modified tables requires access to the dbt artifacts to compare state and results with:
 Example: `dbt run --select "result:<status>+" state:modified+ --defer --state ./<dbt-artifact-path>`
 
-The approach taken here is to python script (i.e. `python dbt/macro/export_artifacts.py`, `python dbt/macros/import_artifacts.py`) prior and after dbt operations. Only requirement is python, dbt, and duckdb.
+The approach taken here is to use a combination of python files and macros (i.e. `python dbt/macro/import_artifacts.py`, `python dbt/macros/export_artifacts.sql`) prior and after dbt operations since macros can not install files before dbt operations but on-end-run macro to utilize dbt parameters.
+
+switching between branches triggers pre-commit to run python dbt/macros/import_artifacts.py. Must install the post-checkout hook via `uv run pre-commit install --hook-type post-checkout`
 
 
 # Troubleshoot

@@ -3,7 +3,7 @@ multi_engine:
   outputs:
     local:
       type: duckdb
-      schema: dev
+      schema: dbt
       threads: 3
       path: "local.db" #cannot have same name as motherduck db (ie. dbt.db if dbt database exists and attaching all)
       attach:
